@@ -3,16 +3,13 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc/server",
     "baseUrl": "./",
-    "module": "es2020", // ← passe ici à ES2015+ ou 'es2020'
-    "target": "es2020", // ← ajoute un target ES moderne
-    "moduleResolution": "node",
+    "module": "es2020",
+    "target": "es2020",
+    "moduleResolution": "bundler",
     "types": []
   },
   "files": [
     "src/main.server.ts",
     "src/server.ts"
-  ],
-  "angularCompilerOptions": {
-    "entryModule": "src/app/app.server.module#AppServerModule"
-  }
+  ]
 }

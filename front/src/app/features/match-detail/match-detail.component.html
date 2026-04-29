@@ -1,135 +1,143 @@
 <section class="section">
-  <div *ngIf="match" class="box">
-    <button class="button is-light mb-3" (click)="goBack()">
-      ← Retour à la liste
-    </button>
-
-    <!-- Onglets -->
-    <div class="tabs is-boxed">
-      <ul>
-        <li
-          [class.is-active]="selectedTab === 'analyse'"
-          (click)="selectTab('analyse')"
-        >
-          <a>
-            <span class="icon is-small"
-              ><i class="fas fa-chart-line" aria-hidden="true"></i
-            ></span>
-            <span>Analyse</span>
-          </a>
-        </li>
-        <li
-          [class.is-active]="selectedTab === 'classement'"
-          (click)="selectTab('classement')"
-        >
-          <a>
-            <span class="icon is-small"
-              ><i class="fas fa-list-ol" aria-hidden="true"></i
-            ></span>
-            <span>Classement</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Onglet Analyse -->
-    <div *ngIf="selectedTab === 'analyse'">
-      <h1 class="title is-4">
-        Pronostic {{ match.teamHome }} - {{ match.teamAway }}
-      </h1>
-      <p class="subtitle is-6">{{ match.sportName }}</p>
-
-      <div class="has-text-centered my-4">
-        <p>
-          {{ match.startTime | date : "fullDate" }} à
-          {{ match.startTime | date : "shortTime" }}
-        </p>
-        <div
-          class="is-flex is-justify-content-center is-align-items-center mt-3"
-        >
-          <img
-            *ngIf="match?.logoMiniPathTeamHome"
-            class="mini-logo mx-3"
-            [src]="'/api/images/' + match.logoMiniPathTeamHome"
-          />
-          <span class="has-text-weight-bold">{{ match.teamHome }}</span>
-          <span class="mx-2">VS</span>
-          <span class="has-text-weight-bold">{{ match.teamAway }}</span>
-          <img
-            class="mini-logo mx-3"
-            *ngIf="match?.logoMiniPathTeamHome"
-            [src]="'/api/images/' + match?.logoMiniPathTeamAway"
-          />
+  @if (match) {
+    <div class="box">
+      <button class="button is-light mb-3" (click)="goBack()">
+        ← Retour à la liste
+      </button>
+      <!-- Onglets -->
+      <div class="tabs is-boxed">
+        <ul>
+          <li
+            [class.is-active]="selectedTab === 'analyse'"
+            (click)="selectTab('analyse')"
+            >
+            <a>
+              <span class="icon is-small"
+                ><i class="fas fa-chart-line" aria-hidden="true"></i
+              ></span>
+              <span>Analyse</span>
+            </a>
+          </li>
+          <li
+            [class.is-active]="selectedTab === 'classement'"
+            (click)="selectTab('classement')"
+            >
+            <a>
+              <span class="icon is-small"
+                ><i class="fas fa-list-ol" aria-hidden="true"></i
+              ></span>
+              <span>Classement</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Onglet Analyse -->
+      @if (selectedTab === 'analyse') {
+        <div>
+          <h1 class="title is-4">
+            Pronostic {{ match.teamHome }} - {{ match.teamAway }}
+          </h1>
+          <p class="subtitle is-6">{{ match.sportName }}</p>
+          <div class="has-text-centered my-4">
+            <p>
+              {{ match.startTime | date : "fullDate" }} à
+              {{ match.startTime | date : "shortTime" }}
+            </p>
+            <div
+              class="is-flex is-justify-content-center is-align-items-center mt-3"
+              >
+              @if (match?.logoMiniPathTeamHome) {
+                <img
+                  class="mini-logo mx-3"
+                  [src]="'/api/images/' + match.logoMiniPathTeamHome"
+                  />
+              }
+              <span class="has-text-weight-bold">{{ match.teamHome }}</span>
+              <span class="mx-2">VS</span>
+              <span class="has-text-weight-bold">{{ match.teamAway }}</span>
+              @if (match?.logoMiniPathTeamAway) {
+                <img
+                  class="mini-logo mx-3"
+                  [src]="'/api/images/' + match?.logoMiniPathTeamAway"
+                  />
+              }
+            </div>
+          </div>
+          @if (match.description) {
+            <div class="content mt-5">
+              <h2 class="title is-5">Analyse du match</h2>
+              @if (match?.description) {
+                <markdown
+                  [data]="sanitizeMarkdown(match.description)"
+                ></markdown>
+              }
+            </div>
+          }
         </div>
-      </div>
-
-      <div *ngIf="match.description" class="content mt-5">
-        <h2 class="title is-5">Analyse du match</h2>
-        <markdown
-          *ngIf="match?.description"
-          [data]="sanitizeMarkdown(match.description)"
-        ></markdown>
-      </div>
-    </div>
-
-    <!-- Onglet Classement -->
-    <div *ngIf="selectedTab === 'classement'">
-      <h2 class="title is-5">Classement de la ligue</h2>
-
-      <table class="table is-fullwidth is-hoverable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Équipe</th>
-            <th class="has-text-centered">MJ</th>
-            <th class="has-text-centered">V</th>
-            <th class="has-text-centered">N</th>
-            <th class="has-text-centered">D</th>
-            <th class="has-text-centered">B</th>
-            <th class="has-text-centered">DIFF</th>
-            <th class="has-text-centered">PTS</th>
-            <th class="has-text-centered">État de forme</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of standings; index as i">
-            <td>{{ s.rank }}</td>
-            <td class="is-flex is-align-items-center">
-              <img
-                *ngIf="s?.team?.logoMiniPath"
-                [src]="'/api/images/' + s.team?.logoMiniPath"
-                class="mini-logo mr-2"
-                alt="logo"
-                style="width: 24px; height: 24px"
-              />
-              {{ s?.team?.name }}
-            </td>
-            <td class="has-text-centered">
-              {{ (s.wins ?? 0) + (s.draws ?? 0) + (s.losses ?? 0) }}
-            </td>
-            <td class="has-text-centered">{{ s.wins }}</td>
-            <td class="has-text-centered">{{ s.draws }}</td>
-            <td class="has-text-centered">{{ s.losses }}</td>
-            <td class="has-text-centered">{{ s.pointsScored }}</td>
-            <td class="has-text-centered">{{ s.goalDifference }}</td>
-            <td class="has-text-centered">{{ s.points }}</td>
-            <td class="has-text-centered">
-              <ng-container *ngFor="let f of s.team?.forms">
-                <span
-                  class="tag is-rounded"
+      }
+      <!-- Onglet Classement -->
+      @if (selectedTab === 'classement') {
+        <div>
+          <h2 class="title is-5">Classement de la ligue</h2>
+          <table class="table is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Équipe</th>
+                <th class="has-text-centered">MJ</th>
+                <th class="has-text-centered">V</th>
+                <th class="has-text-centered">N</th>
+                <th class="has-text-centered">D</th>
+                <th class="has-text-centered">B</th>
+                <th class="has-text-centered">DIFF</th>
+                <th class="has-text-centered">PTS</th>
+                <th class="has-text-centered">État de forme</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of standings; track s; let i = $index) {
+                <tr>
+                  <td>{{ s.rank }}</td>
+                  <td class="is-flex is-align-items-center">
+                    @if (s?.team?.logoMiniPath) {
+                      <img
+                        [src]="'/api/images/' + s.team?.logoMiniPath"
+                        class="mini-logo mr-2"
+                        alt="logo"
+                        style="width: 24px; height: 24px"
+                        />
+                    }
+                    {{ s?.team?.name }}
+                  </td>
+                  <td class="has-text-centered">
+                    {{ (s.wins ?? 0) + (s.draws ?? 0) + (s.losses ?? 0) }}
+                  </td>
+                  <td class="has-text-centered">{{ s.wins }}</td>
+                  <td class="has-text-centered">{{ s.draws }}</td>
+                  <td class="has-text-centered">{{ s.losses }}</td>
+                  <td class="has-text-centered">{{ s.pointsScored }}</td>
+                  <td class="has-text-centered">{{ s.goalDifference }}</td>
+                  <td class="has-text-centered">{{ s.points }}</td>
+                  <td class="has-text-centered">
+                    @for (f of s.team?.forms; track f) {
+                      <span
+                        class="tag is-rounded"
                   [ngClass]="{
                     'is-success': f.value === 'V',
                     'is-danger': f.value === 'D',
                     'is-warning': f.value === 'N'
                   }"
-                >
-                  {{ f.value }}
-                </span>
-              </ng-container>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        >
+                        {{ f.value }}
+                      </span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
-  </div>
+  }
 </section>

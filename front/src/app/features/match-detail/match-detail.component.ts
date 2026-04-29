@@ -33,8 +33,7 @@ export class MatchDetailComponent implements OnInit {
     if (publicId) {
       this.matchService.getMatchById(publicId).subscribe({
         next: (res) => {
-          this.match = res
-          console.log('???', res);
+          this.match = res;
         },
         error: (err) => console.error('Erreur chargement match', err)
       });
@@ -42,8 +41,6 @@ export class MatchDetailComponent implements OnInit {
   }
 
   selectTab(tab: 'analyse' | 'classement'): void {
-    console.log("selectTab?", tab);
-
     this.selectedTab = tab;
     if (tab === 'classement') {
       this.loadStandingIfNeeded();
@@ -51,13 +48,10 @@ export class MatchDetailComponent implements OnInit {
   }
 
   loadStandingIfNeeded(): void {
-    console.log("this.selectedTab", this.selectedTab);
-
     if (this.selectedTab === 'classement' && this.match?.league.id && this.standings.length === 0) {
       this.standingService.getStandingByLeague(this.match.league.id).subscribe({
         next: (res) => {
-          this.standings = res
-          console.log("res", res)
+          this.standings = res;
         },
         error: (err) => console.error('Erreur chargement classement', err)
       });

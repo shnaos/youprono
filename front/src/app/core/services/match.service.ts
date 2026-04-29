@@ -32,13 +32,10 @@ export class MatchService {
 
     if (params.sport) httpParams = httpParams.set('sport', params.sport);
     if (params.leagueId) httpParams = httpParams.set('leagueId', params.leagueId.toString());
-    if (params.sport) httpParams = httpParams.set('sport', params.sport);
-    if (params.page) httpParams = httpParams.set('page', params.page.toString());
+    if (params.page !== undefined) httpParams = httpParams.set('page', params.page.toString());
     if (params.size) httpParams = httpParams.set('size', params.size.toString());
     if (params.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
     if (params.direction) httpParams = httpParams.set('direction', params.direction);
-
-    console.log('Params envoyés au backend :', httpParams.toString());
 
     return this.http.get<PaginatedResponse<Match>>(`${this.baseUrl}/match/matches`, { params: httpParams });
   }
