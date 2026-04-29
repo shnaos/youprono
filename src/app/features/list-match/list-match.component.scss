@@ -1,0 +1,92 @@
+.teams {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.team-block {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap; /* Ne jamais couper sur 2 lignes */
+  gap: 0.25rem;
+}
+
+.mini-logo {
+  width: 1.25rem;
+  height: auto;
+  object-fit: contain;
+}
+.match-info .teams strong {
+  font-weight: 600;
+  line-height: 1;
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .section {
+    padding: 0 !important;
+  }
+  .column {
+    padding: 0.5rem !important;
+  }
+  .media-left {
+    max-width: 70%;
+    width: 20%;
+  }
+  .box {
+    padding: 0.5rem;
+  }
+  .media {
+    align-items: flex-start !important;
+  }
+  main,
+  section.section {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .league-logo {
+    max-width: 60%;
+    height: auto;
+    margin-bottom: 0.5rem; /* réduit l'espace en bas */
+  }
+  .match-info .teams {
+    font-size: 0.9rem; /* plus petit que la taille par défaut */
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+  }
+  .media-left img.league-logo {
+    max-width: 60%;
+    height: auto;
+    margin-bottom: 0; /* au cas où il y aurait du spacing résiduel */
+  }
+  .teams {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem; /* ajuste selon le besoin */
+  }
+  .match-info .teams strong {
+    font-weight: 600;
+    line-height: 1;
+  }
+  .mini-logo {
+    width: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    object-fit: contain;
+    display: inline-block;
+  }
+}
+.bookmakers {
+  display: flex;
+  flex-direction: row;
+}
