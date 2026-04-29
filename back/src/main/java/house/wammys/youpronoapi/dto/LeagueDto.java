@@ -16,7 +16,7 @@ public record LeagueDto(
                 league.getId(),
                 league.getPublicId().toString(),
                 league.getName(),
-                league.getName().toLowerCase().replaceAll("[^a-z0-9]+", "-"),
+                league.getName().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""),
                 null,
                 league.getLogoUrl(),
                 league.getSport() != null ? league.getSport().getName() : null);
