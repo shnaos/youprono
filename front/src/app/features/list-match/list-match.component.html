@@ -5,45 +5,49 @@
       class="button is-rounded"
       [ngClass]="{ 'is-light': selectedSport === 'all' }"
       (click)="filterBySport('all')"
-    >
+      >
       Tout
     </button>
     <button
       class="button is-rounded"
       [ngClass]="{ 'is-light': selectedSport === 'soccer' }"
       (click)="filterBySport('soccer')"
-    >
+      >
       Foot
     </button>
     <button
       class="button is-rounded"
       [ngClass]="{ 'is-light': selectedSport === 'tennis' }"
       (click)="filterBySport('tennis')"
-    >
+      >
       Tennis
     </button>
     <button
       class="button is-rounded"
       [ngClass]="{ 'is-light': selectedSport === 'basketball' }"
       (click)="filterBySport('basketball')"
-    >
+      >
       Basket
     </button>
     <button
       class="button is-rounded"
       [ngClass]="{ 'is-light': selectedSport === 'rugby' }"
       (click)="filterBySport('rugby')"
-    >
+      >
       Rugby
     </button>
-    <div class="select is-rounded mt-2" *ngIf="leagues.length > 0">
-      <select [(ngModel)]="selectedLeague" (change)="onLeagueChange()">
-        <option [ngValue]="null">Toutes les ligues</option>
-        <option *ngFor="let league of leagues" [ngValue]="league">
-          {{ league.name }}
-        </option>
-      </select>
-    </div>
+    @if (leagues.length > 0) {
+      <div class="select is-rounded mt-2">
+        <select [(ngModel)]="selectedLeague" (change)="onLeagueChange()">
+          <option [ngValue]="null">Toutes les ligues</option>
+          @for (league of leagues; track league) {
+            <option [ngValue]="league">
+              {{ league.name }}
+            </option>
+          }
+        </select>
+      </div>
+    }
   </div>
 
   <!-- Liste des matchs -->
@@ -51,93 +55,93 @@
     <div
       class="columns is-multiline is-centered is-variable is-6"
       style="max-width: 1600px; margin: auto"
-    >
-      <div
-        class="column is-full-mobile is-half-tablet is-two-thirds-desktop"
-        *ngFor="let match of matches"
       >
-        <article
-          (click)="goToMatchDetail(match.publicId)"
-          class="media box bd-link"
-        >
-          <div class="media-left">
-            <img
-              class="league-logo"
-              [src]="'/api/images/' + match.league.logoPath"
-            />
-          </div>
-          <div class="media-content match-info">
-            <p class="teams truncate">
-              <span class="team-block">
-                <strong>{{ match.teamHome }}</strong>
-                <img
-                  class="mini-logo"
-                  [src]="'/api/images/' + match.logoMiniPathTeamHome"
-                  alt="Logo domicile"
+      @for (match of matches; track match) {
+        <div
+          class="column is-full-mobile is-half-tablet is-two-thirds-desktop"
+          >
+          <article
+            (click)="goToMatchDetail(match.publicId)"
+            class="media box bd-link"
+            >
+            <div class="media-left">
+              <img
+                class="league-logo"
+                [src]="'/api/images/' + match.league.logoPath"
                 />
-              </span>
-              /
-              <span class="team-block">
-                <img
-                  class="mini-logo"
-                  [src]="'/api/images/' + match.logoMiniPathTeamAway"
-                  alt="Logo extérieur"
-                />
-                <strong>{{ match.teamAway }}</strong>
-              </span>
-            </p>
-
-            <p class="is-size-7 has-text-grey">
-              {{ match.sportName }} -
-              {{ match.startTime | date : "dd/MM/yyyy HH:mm" }}
-            </p>
-
-            <!-- Liste des cotes -->
-            <!-- Affichage des meilleures cotes -->
-            <!-- Affichage des meilleures cotes -->
-            <div *ngIf="match.odds?.length > 0" class="mt-2">
-              <p class="is-size-7 has-text-weight-semibold">
-                Meilleures cotes :
+            </div>
+            <div class="media-content match-info">
+              <p class="teams truncate">
+                <span class="team-block">
+                  <strong>{{ match.teamHome }}</strong>
+                  <img
+                    class="mini-logo"
+                    [src]="'/api/images/' + match.logoMiniPathTeamHome"
+                    alt="Logo domicile"
+                    />
+                </span>
+                /
+                <span class="team-block">
+                  <img
+                    class="mini-logo"
+                    [src]="'/api/images/' + match.logoMiniPathTeamAway"
+                    alt="Logo extérieur"
+                    />
+                  <strong>{{ match.teamAway }}</strong>
+                </span>
               </p>
-              <div class="bookmakers">
-                <div class="mb-1 mx-1">
-                  <span
-                    class="tag is-success is-light"
+              <p class="is-size-7 has-text-grey">
+                {{ match.sportName }} -
+                {{ match.startTime | date : "dd/MM/yyyy HH:mm" }}
+              </p>
+              <!-- Liste des cotes -->
+              <!-- Affichage des meilleures cotes -->
+              <!-- Affichage des meilleures cotes -->
+              @if (match.odds?.length > 0) {
+                <div class="mt-2">
+                  <p class="is-size-7 has-text-weight-semibold">
+                    Meilleures cotes :
+                  </p>
+                  <div class="bookmakers">
+                    <div class="mb-1 mx-1">
+                      <span
+                        class="tag is-success is-light"
                     title="Bookmaker : {{
                       getBestOdds(match).homeWin.bookmaker
                     }}"
-                  >
-                    1 : {{ getBestOdds(match).homeWin.value }}
-                  </span>
-                </div>
-
-                <div
-                  class="mx-1 mb-1"
-                  *ngIf="getBestOdds(match).draw.value > 0"
-                >
-                  <span
-                    class="tag is-info is-light"
-                    title="Bookmaker : {{ getBestOdds(match).draw.bookmaker }}"
-                  >
-                    N : {{ getBestOdds(match).draw.value }}
-                  </span>
-                </div>
-
-                <div class="mx-1">
-                  <span
-                    class="tag is-danger is-light"
+                        >
+                        1 : {{ getBestOdds(match).homeWin.value }}
+                      </span>
+                    </div>
+                    @if (getBestOdds(match).draw.value > 0) {
+                      <div
+                        class="mx-1 mb-1"
+                        >
+                        <span
+                          class="tag is-info is-light"
+                          title="Bookmaker : {{ getBestOdds(match).draw.bookmaker }}"
+                          >
+                          N : {{ getBestOdds(match).draw.value }}
+                        </span>
+                      </div>
+                    }
+                    <div class="mx-1">
+                      <span
+                        class="tag is-danger is-light"
                     title="Bookmaker : {{
                       getBestOdds(match).awayWin.bookmaker
                     }}"
-                  >
-                    2 : {{ getBestOdds(match).awayWin.value }}
-                  </span>
+                        >
+                        2 : {{ getBestOdds(match).awayWin.value }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              }
             </div>
-          </div>
-        </article>
-      </div>
+          </article>
+        </div>
+      }
     </div>
   </div>
   <!-- Pagination -->
@@ -145,43 +149,49 @@
     class="pagination is-centered mt-4"
     role="navigation"
     aria-label="pagination"
-  >
+    >
     <a
       class="pagination-previous"
       [class.is-disabled]="currentPage === 1"
       (click)="changePage(currentPage - 1)"
-    >
+      >
       Précédent
     </a>
     <a
       class="pagination-next"
       [class.is-disabled]="currentPage === totalPages"
       (click)="changePage(currentPage + 1)"
-    >
+      >
       Suivant
     </a>
     <ul class="pagination-list">
-      <li *ngIf="pages()[0] > 1">
-        <a class="pagination-link" (click)="changePage(1)">1</a>
-        <span class="pagination-ellipsis">&hellip;</span>
-      </li>
+      @if (pages()[0] > 1) {
+        <li>
+          <a class="pagination-link" (click)="changePage(1)">1</a>
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+      }
 
-      <li *ngFor="let page of pages()">
-        <a
-          class="pagination-link"
-          [ngClass]="{ 'is-current': page === currentPage }"
-          (click)="changePage(page)"
-        >
-          {{ page }}
-        </a>
-      </li>
+      @for (page of pages(); track page) {
+        <li>
+          <a
+            class="pagination-link"
+            [ngClass]="{ 'is-current': page === currentPage }"
+            (click)="changePage(page)"
+            >
+            {{ page }}
+          </a>
+        </li>
+      }
 
-      <li *ngIf="pages()[pages().length - 1] < totalPages">
-        <span class="pagination-ellipsis">&hellip;</span>
-        <a class="pagination-link" (click)="changePage(totalPages)">
-          {{ totalPages }}
-        </a>
-      </li>
+      @if (pages()[pages().length - 1] < totalPages) {
+        <li>
+          <span class="pagination-ellipsis">&hellip;</span>
+          <a class="pagination-link" (click)="changePage(totalPages)">
+            {{ totalPages }}
+          </a>
+        </li>
+      }
     </ul>
   </nav>
 </section>
