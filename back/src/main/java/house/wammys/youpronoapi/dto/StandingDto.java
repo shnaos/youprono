@@ -17,7 +17,7 @@ public record StandingDto(
         String date,
         TeamInfo team) {
 
-    public record TeamInfo(Long id, String publicId, String name, String shortName, String logoPath) {
+    public record TeamInfo(Long id, String publicId, String name, String shortName, String logoMiniPath) {
     }
 
     public static StandingDto from(Standing standing) {
