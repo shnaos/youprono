@@ -26,19 +26,15 @@ export class ListMatchComponent implements OnInit {
   }
 
   filterBySport(sport: string): void {
-    console.log(sport);
     this.selectedSport = sport;
     this.currentPage = 1;
     this.loadLeagues(sport);
-    this.loadMatches();
   }
   goToMatchDetail(publicId: string): void {
-    console.log(publicId)
     this.router.navigate(['/match', publicId]);
   }
 
   onLeagueChange(): void {
-    console.log('Ligue sélectionnée :', this.selectedLeague);
     this.currentPage = 1;
     this.loadMatches();
   }
@@ -102,15 +98,15 @@ export class ListMatchComponent implements OnInit {
     if (sport === 'all') {
       this.leagues = [];
       this.selectedLeague = null;
-      this.loadMatches(); // Ajoutez ce rappel si vous souhaitez forcer un refresh
+      this.loadMatches();
       return;
     }
 
     this.matchService.getLeaguesBySport(sport).subscribe({
       next: (leagues) => {
         this.leagues = leagues;
-        this.selectedLeague = null; // <- important pour bien pré-sélectionner "Toutes les ligues"
-        this.loadMatches(); // <- vous pouvez appeler loadMatches ici aussi
+        this.selectedLeague = null;
+        this.loadMatches();
       },
       error: (err) => console.error('Erreur lors du chargement des ligues', err)
     });

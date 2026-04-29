@@ -97,14 +97,6 @@
           },
           "defaultConfiguration": "production"
         },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "browserTarget": "frontend:build:production",
-            "serverTarget": "frontend:server:production",
-            "routes": ["/", "/match", "/list-match"]
-          }
-        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
