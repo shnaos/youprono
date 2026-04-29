@@ -30,9 +30,11 @@ public class ImageController {
 
     @GetMapping("/**")
     public ResponseEntity<?> getImage(HttpServletRequest request) throws IOException {
-        // Extract everything after /api/images/
-        String prefix = request.getContextPath() + "/api/images/";
-        String rawPath = request.getRequestURI().substring(prefix.length());
+        // Extract everything after /api/images/ — works regardless of context path
+        String requestUri = request.getRequestURI();
+        String marker = "/api/images/";
+        int idx = requestUri.indexOf(marker);
+        String rawPath = idx >= 0 ? requestUri.substring(idx + marker.length()) : "";
 
         // If it is an absolute external URL (stored by the import services), redirect to it
         if (rawPath.startsWith("http://") || rawPath.startsWith("https://")) {
