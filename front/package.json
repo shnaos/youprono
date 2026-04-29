@@ -13,7 +13,6 @@
     "build:server": "ng run frontend:server:production",
     "build:ssr": "ng build && ng run frontend:server",
     "serve:ssr": "node dist/frontend/server/main.js",
-    "prerender": "ng run frontend:prerender",
     "dev:ssr": "ng run frontend:serve-ssr"
   },
   "private": true,

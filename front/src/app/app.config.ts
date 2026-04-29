@@ -1,4 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, SecurityContext } from '@angular/core';
+
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -12,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay()),
-    provideMarkdown({ sanitize: SecurityContext.NONE })
+    provideMarkdown({ sanitize: SecurityContext.HTML })
   ]
 };
