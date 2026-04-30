@@ -1,14 +1,13 @@
 package house.wammys.youpronoapi.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +55,9 @@ public class ImageController {
         if (contentType == null) {
             contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
-        InputStream stream = Files.newInputStream(imagePath);
+        // FileSystemResource manages stream lifecycle; Spring closes it after writing the response
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(new InputStreamResource(stream));
+                .body(new FileSystemResource(imagePath));
     }
 }
