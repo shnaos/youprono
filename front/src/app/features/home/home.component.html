@@ -1,1 +1,77 @@
-<p>home works!</p>
+<section class="section">
+  <div class="container">
+    <h1 class="title is-4 mb-4">Matchs à venir</h1>
+
+    @if (loading) {
+      <div class="has-text-centered py-6">
+        <span class="icon is-large has-text-grey">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+        </span>
+        <p class="has-text-grey mt-2">Chargement...</p>
+      </div>
+    } @else if (error) {
+      <div class="notification is-danger is-light">
+        <p>Impossible de charger les matchs. Veuillez réessayer.</p>
+      </div>
+    } @else if (upcomingMatches.length === 0) {
+      <div class="notification is-info is-light">
+        <p>Aucun match à venir pour le moment.</p>
+      </div>
+    } @else {
+      <swiper-container
+        slides-per-view="1.2"
+        space-between="16"
+        grab-cursor="true"
+        breakpoints='{"640":{"slidesPerView":2.2},"1024":{"slidesPerView":3.2}}'
+        class="match-swiper"
+      >
+        @for (match of upcomingMatches; track match.publicId) {
+          <swiper-slide>
+            <a [routerLink]="['/match', match.publicId]" class="card match-card">
+              <div class="card-header">
+                <div class="card-header-icon">
+                  <img
+                    class="league-logo"
+                    [src]="logoUrl(match.league.logoPath)"
+                    [alt]="match.league.name"
+                  />
+                </div>
+                <p class="card-header-title is-size-7">{{ match.league.name }}</p>
+              </div>
+              <div class="card-content">
+                <div class="teams-row">
+                  <div class="team">
+                    <img
+                      class="team-logo"
+                      [src]="logoUrl(match.logoMiniPathTeamHome)"
+                      [alt]="match.teamHome"
+                    />
+                    <span class="team-name">{{ match.teamHome }}</span>
+                  </div>
+                  <span class="vs">VS</span>
+                  <div class="team">
+                    <img
+                      class="team-logo"
+                      [src]="logoUrl(match.logoMiniPathTeamAway)"
+                      [alt]="match.teamAway"
+                    />
+                    <span class="team-name">{{ match.teamAway }}</span>
+                  </div>
+                </div>
+                <p class="match-date has-text-grey has-text-centered mt-3">
+                  {{ match.startTime | date:'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
+            </a>
+          </swiper-slide>
+        }
+      </swiper-container>
+
+      <div class="has-text-centered mt-5">
+        <a routerLink="/matches" class="button is-primary is-rounded">
+          Voir tous les matchs
+        </a>
+      </div>
+    }
+  </div>
+</section>
